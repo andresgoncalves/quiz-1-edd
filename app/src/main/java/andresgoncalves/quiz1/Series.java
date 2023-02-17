@@ -12,7 +12,8 @@ public class Series {
     private String name;
     private String sinopsis;
     private int type;
-    private List<Episode> episodes = new List<Episode>();
+    
+    private final List<Episode> episodes = new List<Episode>();
 
     public Series(String name, String sinopsis, int type) {
         this.name = name;
