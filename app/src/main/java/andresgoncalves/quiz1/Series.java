@@ -5,13 +5,14 @@ package andresgoncalves.quiz1;
  * @author Andres
  */
 public class Series {
+    public static final int ALL = 0;
     public static final int KIDS = 1;
     public static final int ADULTS = 2;
-    public static final int ALL = 3;
     
     private String name;
     private String sinopsis;
     private int type;
+    private List<Episode> episodes = new List<Episode>();
 
     public Series(String name, String sinopsis, int type) {
         this.name = name;
@@ -41,5 +42,9 @@ public class Series {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public List<Episode> getEpisodes() {
+        return episodes;
     }
 }
