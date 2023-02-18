@@ -21,8 +21,8 @@ public class DataLoader {
                 if(line.startsWith("%")) {
                     String[] data = line.replace("%", "").split("/");                   
                     int type = 
-                        "infantil".equals(data[2]) ? Series.KIDS :
-                        "adulto".equals(data[2]) ? Series.ADULTS :
+                        data[2].contains("infantil") ? Series.KIDS :
+                        data[2].contains("adulto") ? Series.ADULTS :
                         Series.ALL;
                     series = new Series(data[0], data[1], type);
                     list.append(series);

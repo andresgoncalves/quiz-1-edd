@@ -15,7 +15,7 @@ public class CataloguePanel extends javax.swing.JPanel {
         initComponents();
     }
     
-    public void loadCatalogue() {
+    public void xloadCatalogue() {
         textArea.setText("");
         for(Node<Series> node = series.getFirst(); node != null; node = node.getNext()) {
             if(
@@ -28,6 +28,51 @@ public class CataloguePanel extends javax.swing.JPanel {
                         node.getValue().getEpisodes().getSize()
                 ));
             }
+        }
+    }
+    
+    
+    public void loadCatalogue() {
+        List<Series> results = new List<Series>();
+        for(Node<Series> node = series.getFirst(); node != null; node = node.getNext()) {
+            if(
+                filterGroup.isSelected(showAllButton.getModel()) ||
+                node.getValue().getType() == Series.KIDS && filterGroup.isSelected(showKidsButton.getModel()) ||
+                node.getValue().getType() == Series.ADULTS && filterGroup.isSelected(showAdultsButton.getModel())
+            ) {
+                boolean inserted = false;
+                if(sortGroup.isSelected(showAscendentButton.getModel())) {
+                    for(Node<Series> resultNode = results.getFirst(); resultNode != null; resultNode = resultNode.getNext()) {
+                        if(node.getValue().getEpisodes().getSize() < resultNode.getValue().getEpisodes().getSize()) {
+                            results.insertBefore(node.getValue(), resultNode);
+                            inserted = true;
+                            break;
+                        }
+                    }
+                }
+                else if(sortGroup.isSelected(showDescendentButton.getModel())) {
+                    for(Node<Series> resultNode = results.getFirst(); resultNode != null; resultNode = resultNode.getNext()) {
+                        if(node.getValue().getEpisodes().getSize() > resultNode.getValue().getEpisodes().getSize()) {
+                            results.insertBefore(node.getValue(), resultNode);
+                            inserted = true;
+                            break;
+                        }
+                    }
+                }
+                if(!inserted) {
+                    results.append(node.getValue());
+                }
+            }
+        }
+        
+        textArea.setText("");
+        for(Node<Series> node = results.getFirst(); node != null; node = node.getNext()) {
+            textArea.append("%s | %d Capítulos\n".formatted(
+                    node.getValue().getName(), 
+                    node.getValue().getEpisodes().getSize()
+            ));
+        
+            System.out.println(node.getValue().getName());
         }
     }
 
@@ -48,6 +93,7 @@ public class CataloguePanel extends javax.swing.JPanel {
 
         filterGroup = new javax.swing.ButtonGroup();
         sortGroup = new javax.swing.ButtonGroup();
+        contentPanel = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
         filterPanel = new javax.swing.JPanel();
@@ -57,8 +103,12 @@ public class CataloguePanel extends javax.swing.JPanel {
         sortPanel = new javax.swing.JPanel();
         showAscendentButton = new javax.swing.JRadioButton();
         showDescendentButton = new javax.swing.JRadioButton();
+        buttonPanel = new javax.swing.JPanel();
+        searchEpisodeButton = new javax.swing.JButton();
 
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new java.awt.BorderLayout());
+
+        contentPanel.setLayout(new java.awt.GridBagLayout());
 
         textArea.setEditable(false);
         textArea.setColumns(40);
@@ -69,7 +119,7 @@ public class CataloguePanel extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        add(scrollPane, gridBagConstraints);
+        contentPanel.add(scrollPane, gridBagConstraints);
 
         filterPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -110,7 +160,7 @@ public class CataloguePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        add(filterPanel, gridBagConstraints);
+        contentPanel.add(filterPanel, gridBagConstraints);
 
         sortPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -141,17 +191,42 @@ public class CataloguePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        add(sortPanel, gridBagConstraints);
+        contentPanel.add(sortPanel, gridBagConstraints);
+
+        add(contentPanel, java.awt.BorderLayout.CENTER);
+
+        buttonPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
+
+        searchEpisodeButton.setText("Buscar serie");
+        searchEpisodeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchEpisodeButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        buttonPanel.add(searchEpisodeButton, gridBagConstraints);
+
+        add(buttonPanel, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
         loadCatalogue();
     }//GEN-LAST:event_buttonActionPerformed
 
+    private void searchEpisodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEpisodeButtonActionPerformed
+        App.getInstance().showSeriesSearchCard();
+    }//GEN-LAST:event_searchEpisodeButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JPanel contentPanel;
     private javax.swing.ButtonGroup filterGroup;
     private javax.swing.JPanel filterPanel;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JButton searchEpisodeButton;
     private javax.swing.JRadioButton showAdultsButton;
     private javax.swing.JRadioButton showAllButton;
     private javax.swing.JRadioButton showAscendentButton;

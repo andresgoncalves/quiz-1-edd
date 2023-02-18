@@ -27,15 +27,32 @@ public class App extends javax.swing.JFrame {
         try {
             series = DataLoader.load(file);
             cataloguePanel.setSeries(series);
+            seriesSearchPanel.setSeries(series);
             showCard("CatalogueCard");
         } catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "El formato del archivo es inadecuado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     public void showCard(String name) {
-        ((CardLayout) mainPanel.getLayout()).show(mainPanel, name);
+        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), name);
+    }
+    
+    public void showCatalogueCard() {
+        showCard("CatalogueCard");
+    }
+    
+    public void showSeriesSearchCard() {
+        showCard("SeriesSearchCard");
+    }
+    
+    public void showEpisodeSearchCard(Series series) {
+        episodeSearchPanel.setSeries(series);
+        showCard("EpisodeSearchCard");
     }
 
     public List<Series> getSeries() {
@@ -50,80 +67,23 @@ public class App extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        mainPanel = new javax.swing.JPanel();
         fileLoaderPanel = new andresgoncalves.quiz1.FileLoaderPanel();
         cataloguePanel = new andresgoncalves.quiz1.CataloguePanel();
-        buttonPanel = new javax.swing.JPanel();
-        fileButton = new javax.swing.JButton();
-        catalogueButton = new javax.swing.JButton();
-        searchButton = new javax.swing.JButton();
+        seriesSearchPanel = new andresgoncalves.quiz1.SeriesSearchPanel();
+        episodeSearchPanel = new andresgoncalves.quiz1.EpisodeSearchPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setPreferredSize(new java.awt.Dimension(800, 600));
-
-        mainPanel.setLayout(new java.awt.CardLayout());
-        mainPanel.add(fileLoaderPanel, "FileLoaderCard");
-        mainPanel.add(cataloguePanel, "CatalogueCard");
-
-        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
-
-        buttonPanel.setLayout(new java.awt.GridBagLayout());
-
-        fileButton.setText("Archivo");
-        fileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fileButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        buttonPanel.add(fileButton, gridBagConstraints);
-
-        catalogueButton.setText("Catálogo");
-        catalogueButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                catalogueButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        buttonPanel.add(catalogueButton, gridBagConstraints);
-
-        searchButton.setText("Buscar");
-        searchButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        buttonPanel.add(searchButton, gridBagConstraints);
-
-        getContentPane().add(buttonPanel, java.awt.BorderLayout.NORTH);
+        getContentPane().setLayout(new java.awt.CardLayout());
+        getContentPane().add(fileLoaderPanel, "FileLoaderCard");
+        getContentPane().add(cataloguePanel, "CatalogueCard");
+        getContentPane().add(seriesSearchPanel, "SeriesSearchCard");
+        getContentPane().add(episodeSearchPanel, "EpisodeSearchCard");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
-        showCard("FileLoaderCard");
-    }//GEN-LAST:event_fileButtonActionPerformed
-
-    private void catalogueButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_catalogueButtonActionPerformed
-        showCard("CatalogueCard");
-    }//GEN-LAST:event_catalogueButtonActionPerformed
-
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        showCard("SearchCard");
-    }//GEN-LAST:event_searchButtonActionPerformed
 
     private static App instance;
             
@@ -151,12 +111,9 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel buttonPanel;
-    private javax.swing.JButton catalogueButton;
     private andresgoncalves.quiz1.CataloguePanel cataloguePanel;
-    private javax.swing.JButton fileButton;
+    private andresgoncalves.quiz1.EpisodeSearchPanel episodeSearchPanel;
     private andresgoncalves.quiz1.FileLoaderPanel fileLoaderPanel;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JButton searchButton;
+    private andresgoncalves.quiz1.SeriesSearchPanel seriesSearchPanel;
     // End of variables declaration//GEN-END:variables
 }
