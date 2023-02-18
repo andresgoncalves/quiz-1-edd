@@ -23,6 +23,34 @@ public class List<T> {
         size += 1;
     }
     
+    public void insertBefore(T value, Node<T> ref) {
+        Node<T> node = new Node<T>(value);
+        if(ref.getPrev() != null) {
+            ref.getPrev().setNext(node);
+            node.setPrev(ref.getPrev());
+        }
+        else {
+            first = node;
+        }
+        node.setNext(ref);
+        ref.setPrev(node);
+        size += 1;
+    }
+    
+    public void insertAfter(T value, Node<T> ref) {
+        Node<T> node = new Node<T>(value);
+        if(ref.getNext() != null) {
+            ref.getNext().setPrev(node);
+            node.setNext(ref.getNext());
+        }
+        else {
+            last = node;
+        }
+        node.setPrev(ref);
+        ref.setNext(node);
+        size += 1;
+    }
+    
     public Node<T> getFirst() {
         return first;
     }
